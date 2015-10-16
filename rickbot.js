@@ -39,7 +39,7 @@ var youBrokeMasterPayload = {
 
 //======= Greeting
 var payload = {
-  'text': 'Production alert system online. And awaaaay we go!',
+  'text': 'Production build alert system online. And awaaaay we go!',
   'username': 'Rick Sanchez',
   'icon_url': 'http://i.imgur.com/ijJCNrh.jpg'
 };
