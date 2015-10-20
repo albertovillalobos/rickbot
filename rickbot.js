@@ -23,23 +23,23 @@ var youBrokeMasterPayload = {
     "text": "Alright... who broke master? :rotating_light: :rotating_light: :rotating_light:",
     "username" : "Rick Sanchez",
     "icon_url" : "http://i.imgur.com/ijJCNrh.jpg",
-    "attachments": [
-        {
-            "fallback": "Master is broken!",
-            "color": "danger",
-            "title": "View on Jenkins",
-            "title_link": "https://hq.ringrevenue.net:9443/job/production/",
-            "image_url": "http://i.imgur.com/CNSlbcg.jpg",
-            "thumb_url": "http://i.imgur.com/CNSlbcg.jpg"
-        }
-    ]
+    // "attachments": [
+    //     {
+    //         "fallback": "Master is broken!",
+    //         "color": "danger",
+    //         "title": "View on Jenkins",
+    //         "title_link": "https://hq.ringrevenue.net:9443/job/production/",
+    //         "image_url": "http://i.imgur.com/CNSlbcg.jpg",
+    //         "thumb_url": "http://i.imgur.com/CNSlbcg.jpg"
+    //     }
+    // ]
 }
 
 
 
 //======= Greeting
 var payload = {
-  'text': 'Production build alert system online. And awaaaay we go!',
+  'text': 'Production & Master build alert system online. And awaaaay we go!',
   'username': 'Rick Sanchez',
   'icon_url': 'http://i.imgur.com/ijJCNrh.jpg'
 };
@@ -119,43 +119,44 @@ setInterval( function() {
     // Master
     // ==========
 
-    // var masterBuild = JSON.parse(body).latest.filter(function(value) {
-    //   return value.name === 'master';
-    // })[0];
-    //
-    // if (masterGreen && !masterBuild.green) {
-    //   console.log('masters on fire');
-    //   youBrokeMasterPayload.attachments[0].title_link = masterBuild.url;
-    //   request({
-    //       url: config.webhookurl,
-    //       method: 'POST',
-    //       body: JSON.stringify(youBrokeMasterPayload)
-    //   }, function(error, response, body){
-    //       if(error) {
-    //           console.log(error);
-    //       } else {
-    //           console.log(response.statusCode, body);
-    //       }
-    //   });
-    //
-    // }
-    // if (!masterGreen && masterBuild.green) {
-    //   console.log('masters fixed!');
-    //   var payload = {  "text": "Master works again!<"+masterBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
-    //   request({
-    //       url: config.webhookurl,
-    //       method: 'POST',
-    //       body: JSON.stringify(payload)
-    //   }, function(error, response, body){
-    //       if(error) {
-    //           console.log(error);
-    //       } else {
-    //           console.log(response.statusCode, body);
-    //       }
-    //   });
-    // }
-    //
-    // masterGreen = masterBuild.green;
+    var masterBuild = JSON.parse(body).latest.filter(function(value) {
+      return value.name === 'master';
+    })[0];
+
+    // masterBuild.green = true;
+    if (masterGreen && !masterBuild.green) {
+      console.log('masters on fire');
+      // youBrokeMasterPayload.attachments[0].title_link = masterBuild.url;
+      request({
+          url: config.webhookurl,
+          method: 'POST',
+          body: JSON.stringify(youBrokeMasterPayload)
+      }, function(error, response, body){
+          if(error) {
+              console.log(error);
+          } else {
+              console.log(response.statusCode, body);
+          }
+      });
+
+    }
+    if (!masterGreen && masterBuild.green) {
+      console.log('masters fixed!');
+      var payload = {  "text": "Master is green again!<"+masterBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
+      request({
+          url: config.webhookurl,
+          method: 'POST',
+          body: JSON.stringify(payload)
+      }, function(error, response, body){
+          if(error) {
+              console.log(error);
+          } else {
+              console.log(response.statusCode, body);
+          }
+      });
+    }
+
+    masterGreen = masterBuild.green;
 
   })
 }, 5000);
