@@ -23,16 +23,16 @@ var youBrokeMasterPayload = {
     "text": "Alright... who broke master? :rotating_light: :rotating_light: :rotating_light:",
     "username" : "Rick Sanchez",
     "icon_url" : "http://i.imgur.com/ijJCNrh.jpg",
-    // "attachments": [
-    //     {
-    //         "fallback": "Master is broken!",
-    //         "color": "danger",
-    //         "title": "View on Jenkins",
-    //         "title_link": "https://hq.ringrevenue.net:9443/job/production/",
-    //         "image_url": "http://i.imgur.com/CNSlbcg.jpg",
-    //         "thumb_url": "http://i.imgur.com/CNSlbcg.jpg"
-    //     }
-    // ]
+    "attachments": [
+        {
+            "fallback": "Master is broken!",
+            "color": "danger",
+            "title": "View on Jenkins",
+            "title_link": "https://hq.ringrevenue.net:9443/job/production/",
+            // "image_url": "http://i.imgur.com/CNSlbcg.jpg",
+            // "thumb_url": "http://i.imgur.com/CNSlbcg.jpg"
+        }
+    ]
 }
 
 
@@ -126,7 +126,7 @@ setInterval( function() {
     // masterBuild.green = true;
     if (masterGreen && !masterBuild.green) {
       console.log('masters on fire');
-      // youBrokeMasterPayload.attachments[0].title_link = masterBuild.url;
+      youBrokeMasterPayload.attachments[0].title_link = masterBuild.url;
       request({
           url: config.webhookurl,
           method: 'POST',
