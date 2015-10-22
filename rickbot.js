@@ -96,7 +96,7 @@ setInterval( function() {
     if (!green && productionBuild.green) {
       console.log("Production has been fixed");
 
-      var payload = {  "text": "Production's green again!<"+productionBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
+      var payload = {  "text": "Production's green again! <"+productionBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
       request({
           url: config.webhookurl,
           method: 'POST',
@@ -142,7 +142,7 @@ setInterval( function() {
     }
     if (!masterGreen && masterBuild.green) {
       console.log('masters fixed!');
-      var payload = {  "text": "Master is green again!<"+masterBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
+      var payload = {  "text": "Master is green again! <"+masterBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
       request({
           url: config.webhookurl,
           method: 'POST',
