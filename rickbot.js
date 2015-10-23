@@ -63,7 +63,7 @@ var green = true;
 var masterGreen = true;
 
 setInterval( function() {
-  console.log('checking...');
+  // console.log('checking...');
 
   request(config.jenkinstein, function (error, response, body) {
 
