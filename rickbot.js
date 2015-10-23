@@ -13,8 +13,8 @@ var youBrokeProductionPayload = {
             "color": "danger",
             "title": "View on Jenkins",
             "title_link": "https://hq.ringrevenue.net:9443/job/production/",
-            "image_url": "http://i.imgur.com/Altu6Wu.jpg",
-            "thumb_url": "http://i.imgur.com/Altu6Wu.jpg"
+            "image_url": "http://i.imgur.com/oUoXMDp.jpg",
+            "thumb_url": "http://i.imgur.com/oUoXMDp.jpg"
         }
     ]
 }
@@ -38,23 +38,23 @@ var youBrokeMasterPayload = {
 
 
 //======= Greeting
-var payload = {
-  'text': 'Production & Master build alert system online. And awaaaay we go!',
-  'username': 'Rick Sanchez',
-  'icon_url': 'http://i.imgur.com/ijJCNrh.jpg'
-};
-
-request({
-    url: config.webhookurl,
-    method: 'POST',
-    body: JSON.stringify(payload)
-}, function(error, response, body){
-    if(error) {
-        console.log(error);
-    } else {
-        console.log(response.statusCode, body);
-    }
-});
+// var payload = {
+//   'text': 'Production & Master build alert system online. And awaaaay we go!',
+//   'username': 'Rick Sanchez',
+//   'icon_url': 'http://i.imgur.com/ijJCNrh.jpg'
+// };
+//
+// request({
+//     url: config.webhookurl,
+//     method: 'POST',
+//     body: JSON.stringify(payload)
+// }, function(error, response, body){
+//     if(error) {
+//         console.log(error);
+//     } else {
+//         console.log(response.statusCode, body);
+//     }
+// });
 
 //======= end greeting
 
@@ -159,4 +159,4 @@ setInterval( function() {
     masterGreen = masterBuild.green;
 
   })
-}, 5000);
+}, 10000);
