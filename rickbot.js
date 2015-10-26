@@ -68,7 +68,7 @@ setInterval( function() {
   request(config.jenkinstein, function (error, response, body) {
 
     if (error) {
-      console.log(error)
+      console.log('Error requesting jenkinstein api:', error)
       return
     }
 
@@ -86,7 +86,7 @@ setInterval( function() {
           body: JSON.stringify(youBrokeProductionPayload)
       }, function(error, response, body){
           if(error) {
-              console.log(error);
+              console.log('Error posting to slack after prod broken',error);
           } else {
               console.log(response.statusCode, body);
           }
@@ -103,7 +103,7 @@ setInterval( function() {
           body: JSON.stringify(payload)
       }, function(error, response, body){
           if(error) {
-              console.log(error);
+              console.log('Error posting to slack after prod fix',error);
           } else {
               console.log(response.statusCode, body);
           }
@@ -123,7 +123,7 @@ setInterval( function() {
       return value.name === 'master';
     })[0];
 
-    // masterBuild.green = true;
+    // masterBuild.green = false; //testing
     if (masterGreen && !masterBuild.green) {
       console.log('masters on fire');
       youBrokeMasterPayload.attachments[0].title_link = masterBuild.url;
@@ -133,7 +133,7 @@ setInterval( function() {
           body: JSON.stringify(youBrokeMasterPayload)
       }, function(error, response, body){
           if(error) {
-              console.log(error);
+              console.log('Error posting to slack on master broken',error);
           } else {
               console.log(response.statusCode, body);
           }
@@ -149,7 +149,7 @@ setInterval( function() {
           body: JSON.stringify(payload)
       }, function(error, response, body){
           if(error) {
-              console.log(error);
+              console.log('Error posting to slack on master fixed',error);
           } else {
               console.log(response.statusCode, body);
           }
