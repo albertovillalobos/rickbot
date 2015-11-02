@@ -1,7 +1,10 @@
 var request = require('request');
 var config = require('./config');
 
-// console.log(config);
+
+var timeStamp = function() {
+  return '[' + new Date().toUTCString() + '] ';
+}
 
 var youBrokeProductionPayload = {
     "text": "Alright... who broke production? :rotating_light: :rotating_light: :rotating_light:",
@@ -50,25 +53,28 @@ var youBrokeMasterPayload = {
 //     body: JSON.stringify(payload)
 // }, function(error, response, body){
 //     if(error) {
-//         console.log(error);
+//         console.log(timeStamp(),error);
 //     } else {
-//         console.log(response.statusCode, body);
+//         console.log(timeStamp(),response.statusCode, body);
 //     }
 // });
 
 //======= end greeting
+// new greeting
+console.log(timeStamp(),'Rickbot online!');
+
 
 
 var green = true;
 var masterGreen = true;
 
 setInterval( function() {
-  // console.log('checking...');
+  console.log(timeStamp(),'checking...');
 
   request(config.jenkinstein, function (error, response, body) {
 
     if (error) {
-      console.log('Error requesting jenkinstein api:', error)
+      console.log(timeStamp(),'Error requesting jenkinstein api:', error);
       return
     }
 
@@ -78,7 +84,7 @@ setInterval( function() {
 
     // productionBuild.green = false; // testing
     if (green && !productionBuild.green) {
-      console.log("Production has been broken");
+      console.log(timeStamp(),"Production has been broken");
       youBrokeProductionPayload.attachments[0].title_link = productionBuild.url;
       request({
           url: config.webhookurl,
@@ -86,15 +92,15 @@ setInterval( function() {
           body: JSON.stringify(youBrokeProductionPayload)
       }, function(error, response, body){
           if(error) {
-              console.log('Error posting to slack after prod broken',error);
+              console.log(timeStamp(),'Error posting to slack after prod broken',error);
           } else {
-              console.log(response.statusCode, body);
+              console.log(timeStamp(),response.statusCode, body);
           }
       });
     }
 
     if (!green && productionBuild.green) {
-      console.log("Production has been fixed");
+      console.log(timeStamp(),"Production has been fixed");
 
       var payload = {  "text": "Production's green again! <"+productionBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
       request({
@@ -103,9 +109,9 @@ setInterval( function() {
           body: JSON.stringify(payload)
       }, function(error, response, body){
           if(error) {
-              console.log('Error posting to slack after prod fix',error);
+              console.log(timeStamp(),'Error posting to slack after prod fix',error);
           } else {
-              console.log(response.statusCode, body);
+              console.log(timeStamp(),response.statusCode, body);
           }
       });
     }
@@ -125,7 +131,7 @@ setInterval( function() {
 
     // masterBuild.green = false; //testing
     if (masterGreen && !masterBuild.green) {
-      console.log('masters on fire');
+      console.log(timeStamp(),'masters on fire');
       youBrokeMasterPayload.attachments[0].title_link = masterBuild.url;
       request({
           url: config.webhookurl,
@@ -133,15 +139,15 @@ setInterval( function() {
           body: JSON.stringify(youBrokeMasterPayload)
       }, function(error, response, body){
           if(error) {
-              console.log('Error posting to slack on master broken',error);
+              console.log(timeStamp(),'Error posting to slack on master broken',error);
           } else {
-              console.log(response.statusCode, body);
+              console.log(timeStamp(),response.statusCode, body);
           }
       });
 
     }
     if (!masterGreen && masterBuild.green) {
-      console.log('masters fixed!');
+      console.log(timeStamp(),'masters fixed!');
       var payload = {  "text": "Master is green again! <"+masterBuild.url+'| Build here>', "username" : "Rick Sanchez", "icon_url" : "http://i.imgur.com/ijJCNrh.jpg"};
       request({
           url: config.webhookurl,
@@ -149,9 +155,9 @@ setInterval( function() {
           body: JSON.stringify(payload)
       }, function(error, response, body){
           if(error) {
-              console.log('Error posting to slack on master fixed',error);
+              console.log(timeStamp(),'Error posting to slack on master fixed',error);
           } else {
-              console.log(response.statusCode, body);
+              console.log(timeStamp(),response.statusCode, body);
           }
       });
     }
