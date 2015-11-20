@@ -1,6 +1,8 @@
 var request = require('request');
 var config = require('./config');
 
+var timerInterval = 5000; // how long between checks?
+
 
 var timeStamp = function() {
   return '[' + new Date().toUTCString() + '] ';
@@ -67,6 +69,10 @@ console.log(timeStamp(),'Rickbot online!');
 
 var green = true;
 var masterGreen = true;
+var productionBuild = {};
+productionBuild.green = true;
+var masterBuild = {};
+masterBuild.green = true;
 
 setInterval( function() {
   console.log(timeStamp(),'checking...');
@@ -78,9 +84,15 @@ setInterval( function() {
       return
     }
 
-    var productionBuild = JSON.parse(body).latest.filter(function(value) {
-      return value.name === 'production';
-    })[0];
+    try {
+      productionBuild = JSON.parse(body).latest.filter(function(value) {
+        return value.name === 'production';
+      })[0];
+    } catch(e) {
+      console.log(e);
+      console.log(body);
+      return;
+    }
 
     // productionBuild.green = false; // testing
     if (green && !productionBuild.green) {
@@ -125,9 +137,19 @@ setInterval( function() {
     // Master
     // ==========
 
-    var masterBuild = JSON.parse(body).latest.filter(function(value) {
-      return value.name === 'master';
-    })[0];
+
+
+    try {
+      masterBuild = JSON.parse(body).latest.filter(function(value) {
+        return value.name === 'master';
+      })[0];
+    } catch(e) {
+      console.log(e);
+      console.log(body);
+      return;
+    }
+
+
 
     // masterBuild.green = false; //testing
     if (masterGreen && !masterBuild.green) {
@@ -165,4 +187,4 @@ setInterval( function() {
     masterGreen = masterBuild.green;
 
   })
-}, 10000);
+}, timerInterval);
