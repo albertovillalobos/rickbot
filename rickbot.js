@@ -33,9 +33,9 @@ var youBrokeMasterPayload = {
             "fallback": "Master is broken!",
             "color": "danger",
             "title": "View on Jenkins",
-            "title_link": "https://hq.ringrevenue.net:9443/job/production/",
-            // "image_url": "http://i.imgur.com/CNSlbcg.jpg",
-            // "thumb_url": "http://i.imgur.com/CNSlbcg.jpg"
+            "title_link": "https://hq.ringrevenue.net:9443/job/master/",
+            "image_url": "http://i.imgur.com/CNSlbcg.jpg",
+            "thumb_url": "http://i.imgur.com/CNSlbcg.jpg"
         }
     ]
 }
