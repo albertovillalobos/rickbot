@@ -1,7 +1,7 @@
 {
   "name": "rickbot",
   "version": "1.0.0",
-  "description": "slackbot bot for invoca jenkins reporting",
+  "description": "slackbot bot for invoca semaphore reporting",
   "main": "rickbot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -16,7 +16,7 @@ var youBrokeProductionPayload = {
         {
             "fallback": "Production is broken!",
             "color": "danger",
-            "title": "View on Jenkins",
+            "title": "View on Semaphore",
             "title_link": "https://hq.ringrevenue.net:9443/job/production/",
             "image_url": "http://i.imgur.com/oUoXMDp.jpg",
             "thumb_url": "http://i.imgur.com/oUoXMDp.jpg"
@@ -32,7 +32,7 @@ var youBrokeMasterPayload = {
         {
             "fallback": "Master is broken!",
             "color": "danger",
-            "title": "View on Jenkins",
+            "title": "View on Semaphore",
             "title_link": "https://hq.ringrevenue.net:9443/job/master/",
             "image_url": "http://i.imgur.com/CNSlbcg.jpg",
             "thumb_url": "http://i.imgur.com/CNSlbcg.jpg"
