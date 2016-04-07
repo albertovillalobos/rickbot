@@ -4,35 +4,43 @@ var PayloadTemplate = function() {
 PayloadTemplate.prototype = {
   ICON_URL: "http://i.imgur.com/ijJCNrh.jpg",
 
-  red: function(build) {
+  build: function(project, branch, build) {
+    if (build.green) {
+      return this.green(project, branch, build);
+    } else {
+      return this.red(project, branch, build);
+    }
+  },
+  
+  red: function(project, branch, build) {
     var config = {
       "username" : "Rick Sanchez",
       "icon_url" : this.ICON_URL,
     };
   
-    if (build.project_name === "web") {
-      config.text = "Alright... who broke " + this._buildNameFormatted(build.project_name, build.name) + "? :rotating_light: :rotating_light: :rotating_light: <" + build.url + "|View build>";
+    if (project === "web") {
+      config.text = "Alright... who broke " + this._buildNameFormatted(project, branch) + "? :rotating_light: :rotating_light: :rotating_light: <" + build.url + "|View build>";
     
       config.attachments = [
         {
-            "fallback": this._buildNameFormatted(build.project_name, build.name) + " is broken!",
+            "fallback": this._buildNameFormatted(project, branch) + " is broken!",
             "color": "danger",
             "title": "Last commit by " + build.author,
-            "image_url": this._failureImageByBranch(build.project_name, build.name),
-            "thumb_url": this._failureImageByBranch(build.project_name, build.name)
+            "image_url": this._failureImageByBranch(project, branch),
+            "thumb_url": this._failureImageByBranch(project, branch)
         }
       ];
 
     } else {
-      config.text = this._buildNameFormatted(build.project_name, build.name) + " is broken! <" + build.url + "|View build>";
+      config.text = this._buildNameFormatted(project, branch) + " is broken! :rotating_light: <" + build.url + "|View build>";
     }
 
     return config;
   },
 
-  green: function(build) {
+  green: function(project, branch, build) {
     return { 
-      "text": this._buildNameFormatted(build.project_name, build.name) + " is green again! <" + build.url + "|View build>", 
+      "text": this._buildNameFormatted(project, branch) + " is green again! :invoca: <" + build.url + "|View build>", 
       "username" : "Rick Sanchez", 
       "icon_url" : this.ICON_URL,
       "attachments" : [

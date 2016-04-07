@@ -11,15 +11,26 @@ var timeStamp = function() {
 // new greeting
 console.log(timeStamp(),'Rickbot online!');
 
-var productionGreen = true;
-var masterGreen = true;
-var productionBuild = {};
-var masterBuild = {};
+
+// fault in core projects so that we can immediately show their red status if they are currenty red
+var projectCache = {
+  web: {
+    production: { green: true },
+    master:     { green: true }
+  },
+  PNAPI: {
+    master:     { green: true }
+  },
+  backdraft: {
+    production: { green: true },
+    master:     { green: true }
+  }
+};
 
 var payloadTemplate = new PayloadTemplate();
 var currentPayload;
 
-setInterval( function() {
+var loop = setInterval( function() {
   console.log(timeStamp(),'checking...');
 
   request(config.jenkinstein, function (error, response, body) {
@@ -30,79 +41,49 @@ setInterval( function() {
     }
 
     try {
-      productionBuild = JSON.parse(body).latest.filter(function(build) {
-        return build.name === 'production';
-      })[0];
+      var projects = JSON.parse(body).projects;
     } catch(e) {
       console.log(e, body);
       return;
     }
-
-    currentPayload = null;
     
-    // productionBuild.green = false; // testing
-    if (productionGreen && !productionBuild.green) {
-      console.log(timeStamp(),"Production has been broken");
-      currentPayload = payloadTemplate.red(productionBuild);
-    } else if (!productionGreen && productionBuild.green) {
-      currentPayload = payloadTemplate.green(productionBuild);
-    }
-    
-    if (currentPayload) {
+    function fireWebhook(payload) {
       request({
         url: config.webhookurl,
         method: 'POST',
-        body: JSON.stringify(currentPayload)
+        body: JSON.stringify(payload)
       }, function(error, response, body){
         if (error) {
-          console.log(timeStamp(), 'Error posting to slack: ', error, currentPayload);
+          console.log(timeStamp(), 'Error posting to slack: ', error, payload);
         } else {
           console.log(timeStamp(), response.statusCode, body);
         }
       });
-    }
-    
-    productionGreen = productionBuild.green;
+    };
 
-
-    // ==========
-    // Master
-    // ==========
-    
     currentPayload = null;
-
-    try {
-      masterBuild = JSON.parse(body).latest.filter(function(value) {
-        return value.name === 'master';
-      })[0];
-    } catch(e) {
-      console.log(e, body);
-      return;
-    }
-
-    // masterBuild.green = false; //testing
-    if (masterGreen && !masterBuild.green) {
-      console.log(timeStamp(),'masters on fire');
-      currentPayload = payloadTemplate.red(masterBuild);
-    } else if (!masterGreen && masterBuild.green) {
-      currentPayload = payloadTemplate.green(masterBuild);
-    }
     
-    if (currentPayload) {
-      request({
-        url: config.webhookurl,
-        method: 'POST',
-        body: JSON.stringify(currentPayload)
-      }, function(error, response, body){
-        if(error) {
-          console.log(timeStamp(),'Error posting to slack: ', error, currentPayload);
-        } else {
-          console.log(timeStamp(),response.statusCode, body);
+    for (var projectName in projects) {
+      var cachedProject = projectCache[projectName];
+      var currentProject = projects[projectName];
+      
+      //if (projectName == "web") currentProject.production.green = false; // testing
+      //if (projectName == "backdraft") currentProject.master.green = false; // testing
+
+      // let's first make sure we even know about the production branch in both the cache and server
+      ['production', 'master'].forEach(function(branch) {
+        if (cachedProject && cachedProject[branch] && currentProject[branch]) {
+        
+          if (cachedProject[branch].green != currentProject[branch].green) {
+            console.log(timeStamp(), projectName + ":" + branch + " has been " + (currentProject[branch].green ? "fixed" : "broken"));
+            fireWebhook(payloadTemplate.build(projectName, branch, currentProject[branch]));
+          }
         }
       });
     }
 
-    masterGreen = masterBuild.green;
+    // clone latest project status into cache
+    projectCache = JSON.parse(JSON.stringify(projects));
 
   })
 }, timerInterval);
